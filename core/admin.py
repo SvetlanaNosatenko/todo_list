@@ -1,7 +1,4 @@
 from django.contrib import admin
-
-from django.contrib.auth.hashers import check_password, make_password
-
 from core.models import User
 
 
@@ -12,6 +9,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username", "email", "first_name", "last_name")
     exclude = ['password']
     readonly_fields = ("last_login", "date_joined")
+
 
 
 

@@ -1,6 +1,6 @@
 name: Build and deploy action
 on: [push]
-description:
+#description:
 
 jobs:
   build_and_push:

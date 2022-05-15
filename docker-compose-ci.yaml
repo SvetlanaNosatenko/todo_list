@@ -7,7 +7,7 @@ services:
     depends_on:
       - api
   api:
-    image: nosatenko/todo_list:latest:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
     - 8000:8000
     depends_on:
@@ -18,7 +18,7 @@ services:
     volumes:
       - ./.env:/app/.docker_env
   migrations:
-    image: nosatenko/todo_list:latest:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy

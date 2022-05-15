@@ -8,7 +8,7 @@ services:
     depends_on:
       - api
   api:
-    image: nosatenko/todo_list:latest
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_USER: ${DB_USER}
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./.env:/app/.docker_env
   migrations:
-    image: nosatenko/todo_list:latest
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_USER: ${DB_USER}

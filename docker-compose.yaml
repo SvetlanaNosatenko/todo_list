@@ -10,13 +10,13 @@ services:
   api:
     build:
       context: .
-#    environment:
-##      DB_PASSWORD: ${DB_PASSWORD}
-##      DB_USER: ${DB_USER}
-##      DB_NAME: ${DB_NAME}
-#      DB_HOST: postgres
-##      SECRET_KEY: ${SECRET_KEY}
-##      DEBUG: ${DEBUG}
+    environment:
+      DB_PASSWORD: $DB_PASSWORD
+      DB_USER: $DB_USER
+      DB_NAME: $DB_NAME
+      DB_HOST: postgres
+      SECRET_KEY: $SECRET_KEY
+      DEBUG: $DEBUG
     ports:
       - 8000:8000
     depends_on:
@@ -29,13 +29,13 @@ services:
   migrations:
     build:
       context: .
-#    environment:
-#      DB_PASSWORD: ${DB_PASSWORD}
-#      DB_USER: ${DB_USER}
-#      DB_NAME: ${DB_NAME}
-#      DB_HOST: postgres
-#      SECRET_KEY: ${SECRET_KEY}
-#      DEBUG: ${DEBUG}
+    environment:
+      DB_PASSWORD: $DB_PASSWORD
+      DB_USER: $DB_USER
+      DB_NAME: $DB_NAME
+      DB_HOST: postgres
+      SECRET_KEY: $SECRET_KEY
+      DEBUG: $DEBUG
     depends_on:
       postgres:
         condition: service_healthy

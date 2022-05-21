@@ -36,7 +36,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "deploy/docker-compose.yaml,deploy/docker_conf.py"
+          source: "todo_list/docker-compose.yaml, todo_list/.env"
           target: "todo_list"
           strip_components: 1
       - name: run docker-compose

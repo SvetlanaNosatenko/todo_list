@@ -1,13 +1,30 @@
 version: "3.9"
+
+x-environment: &environment-shared
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_HOST: postgres
+  DEBUG: True
+  SECRET_KEY: ${SECRET_KEY}
+#  VK_OAUTH2_KEY: ${VK_OAUTH2_KEY}
+#  VK_OAUTH2_SECRET: ${VK_OAUTH2_SECRET}
+#  BOT_TOKEN: ${BOT_TOKEN}
+
 services:
   front:
     image: sermalenk/skypro-front:base
+    restart: always
     ports:
-      - 8080:80
+        - "80:80"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
+
   api:
     image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    environment: *environment-shared
+    restart: always
     ports:
     - 8000:8000
     depends_on:
@@ -15,26 +32,38 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    volumes:
-      - ./.env:/app/.docker_env
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    healthcheck:
+      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
+      interval: 3s
+      timeout: 3s
+      retries: 3
+#    volumes:
+#      - ./.env:/app/.docker_env
+
   migrations:
     image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    environment: *environment-shared
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./.env:/app/.docker_env
-    command: python manage.py migrate
+    #    volumes:
+#      - ./.env:/app/.docker_env
+    command: >
+      sh -c "python manage.py migrate"
+
   postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_PASSWORD: $DB_PASSWORD
-      POSTGRES_DB: $DB_NAME
-      POSTGRES_USER: $DB_USER
+    image: postgres:13.0-alpine
+    restart: always
+    environment: *environment-shared
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 3
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

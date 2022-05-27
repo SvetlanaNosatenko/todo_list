@@ -1,10 +1,11 @@
 version: "3.9"
 
 x-environment: &environment-shared
-  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_DB: postgres
   POSTGRES_USER: ${POSTGRES_USER}
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   POSTGRES_HOST: postgres
+  DEBUG: True
   SECRET_KEY: ${SECRET_KEY}
 #  VK_OAUTH2_KEY: ${VK_OAUTH2_KEY}
 #  VK_OAUTH2_SECRET: ${VK_OAUTH2_SECRET}
@@ -15,17 +16,17 @@ services:
     image: sermalenk/skypro-front:base
     restart: always
     ports:
-        - "80:80"
+      - "80:80"
     depends_on:
       api:
         condition: service_healthy
 
   api:
-    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: nosatenko/todo_list:latest
     environment: *environment-shared
     restart: always
-    ports:
-    - 8000:8000
+#    ports:
+#    - 8000:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,7 +43,7 @@ services:
 #      - ./.env:/app/.docker_env
 
   migrations:
-    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: nosatenko/todo_list:latest
     environment: *environment-shared
     depends_on:
       postgres:

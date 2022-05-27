@@ -4,7 +4,7 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     steps:
-#      - name: clone code
+      - name: clone code
         uses: actions/checkout@v2
       - name: docker build
         run: docker build -t nosatenko/todo_list:$GITHUB_REF_NAME -$GITHUB_RUN_ID .

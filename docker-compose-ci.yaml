@@ -35,7 +35,7 @@ services:
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
     healthcheck:
-      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
+#      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
       interval: 3s
       timeout: 3s
       retries: 3

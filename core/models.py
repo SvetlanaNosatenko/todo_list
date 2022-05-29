@@ -3,6 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=254)
 
@@ -12,6 +14,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+
+        super().save()
 
 
 

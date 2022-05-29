@@ -1,0 +1,10 @@
+.env
+.git
+.python-version
+venv
+.gitignore
+.idea
+docker-compose-ci.yaml
+docker-compose.yaml
+README.md
+prod_docker_ci.py

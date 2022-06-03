@@ -31,11 +31,6 @@ jobs:
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
 #          cat prod_docker_ci.py | envsubst > deploy/.env
-      - name: Archive docker-compose.yaml
-        uses: actions/upload-artifact@v3
-        with:
-          name: deploy
-          path: deploy/*
       - name: clone files to server
         uses: appleboy/scp-action@master
         with:
@@ -43,7 +38,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "deploy/docker-compose.yaml, deploy/.env"
-          target: "todo_list"
+          target: "todo_list_36"
           strip_components: 1
       - name: Archive docker-compose.yaml
         uses: actions/upload-artifact@v3
@@ -57,5 +52,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd todo_list
+            cd todo_list_36
             echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose up -d

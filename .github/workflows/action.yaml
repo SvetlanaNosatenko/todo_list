@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "deploy/docker-compose.yaml, deploy/.env"
-          target: "todo_list_36"
+          target: "todo_list"
           strip_components: 1
       - name: Archive docker-compose.yaml
         uses: actions/upload-artifact@v3
@@ -52,5 +52,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd todo_list_36
+            cd todo_list
             echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose up -d

@@ -42,18 +42,18 @@ services:
       retries: 3
 #    volumes:
 #      - ./.env:/app/.docker_env
-#  bot:
-#    image: nosatenko/todo_list:latest
-#    environment: *environment-shared
-#    restart: always
-#    env_file:
-#      - .env
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      migrations:
-#        condition: service_completed_successfully
-#    command: python manage.py runbot
+  bot:
+    image: nosatenko/todo_list:latest
+    environment: *environment-shared
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    command: python manage.py runbot
 
   migrations:
     image: nosatenko/todo_list:latest

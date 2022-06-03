@@ -17,6 +17,7 @@ jobs:
     needs: build_and_push
     env:
       POSTGRES_USER: postgres
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
       POSTGRES_DB: ${{ secrets.DB_NAME }}
       SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}

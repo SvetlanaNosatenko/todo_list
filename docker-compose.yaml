@@ -43,29 +43,21 @@ services:
         condition: service_completed_successfully
     volumes:
       - ./:/app/
-    command: python manage.py runserver 0.0.0.0:8000
-    healthcheck:
-      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
-      interval: 3s
-      timeout: 3s
-      retries: 3
-    #    volumes:
-    #      - ./.env:/app/.docker_env
 
-  bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: postgres
-    depends_on:
-      postgres:
-        condition: service_healthy
-      migrations:
-        condition: service_completed_successfully
-    command: python manage.py runbot
+#  bot:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    env_file:
+#      - .env
+#    environment:
+#      POSTGRES_HOST: postgres
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      migrations:
+#        condition: service_completed_successfully
+#    command: python manage.py runbot
 
   postgres:
     image: postgres:13.0-alpine

@@ -6,26 +6,22 @@ x-environment: &environment-shared
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   POSTGRES_HOST: postgres
   SECRET_KEY: ${SECRET_KEY}
-  VK_OAUTH2_KEY: ${VK_OAUTH2_KEY}
-  VK_OAUTH2_SECRET: ${VK_OAUTH2_SECRET}
-#  BOT_TOKEN: ${BOT_TOKEN}
+  SOCIAL_AUTH_VK_OAUTH2_KEY: ${SOCIAL_AUTH_VK_OAUTH2_KEY}
+  SOCIAL_AUTH_VK_OAUTH2_SECRET: ${SOCIAL_AUTH_VK_OAUTH2_SECRET}
 
 services:
   front:
-    image: sermalenk/skypro-front:lesson_35
+    image: sermalenk/skypro-front:lesson_36
     restart: always
     ports:
       - "80:80"
     depends_on:
-      api:
-        condition: service_healthy
+      - api
 
   api:
-    image: nosatenko/todo_list:latest
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment: *environment-shared
     restart: always
-    ports:
-    - 8000:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,22 +29,13 @@ services:
         condition: service_completed_successfully
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-    healthcheck:
-#      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
-      interval: 3s
-      timeout: 3s
-      retries: 3
-#    volumes:
-#      - ./.env:/app/.docker_env
 
   migrations:
-    image: nosatenko/todo_list:latest
+    image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment: *environment-shared
     depends_on:
       postgres:
         condition: service_healthy
-    #    volumes:
-#      - ./.env:/app/.docker_env
     command: >
       sh -c "python manage.py migrate"
 

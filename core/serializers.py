@@ -45,8 +45,7 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=username, password=password)
         if not user:
             raise ValidationError("Username or password is incorrect")
-        attrs["user"] = user
-        return attrs
+        return user
 
 
 class UpdatePasswordSerializer(serializers.ModelSerializer):

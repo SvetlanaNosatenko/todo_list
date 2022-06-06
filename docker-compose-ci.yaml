@@ -19,15 +19,12 @@ services:
     ports:
       - "80:80"
     depends_on:
-      api:
-        condition: service_healthy
+      - api
 
   api:
     image: nosatenko/todo_list:latest
     environment: *environment-shared
     restart: always
-    ports:
-    - 8000:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,13 +32,7 @@ services:
         condition: service_completed_successfully
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-    healthcheck:
-      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
-      interval: 3s
-      timeout: 3s
-      retries: 3
-#    volumes:
-#      - ./.env:/app/.docker_env
+
   bot:
     image: nosatenko/todo_list:latest
     environment: *environment-shared
@@ -61,8 +52,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    #    volumes:
-#      - ./.env:/app/.docker_env
     command: >
       sh -c "python manage.py migrate"
 

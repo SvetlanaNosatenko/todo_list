@@ -30,7 +30,6 @@ jobs:
         run: |
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
-#          cat prod_docker_ci.py | envsubst > deploy/.env
       - name: clone files to server
         uses: appleboy/scp-action@master
         with:

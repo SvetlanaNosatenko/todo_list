@@ -12,8 +12,8 @@ class TgUser(models.Model):
     def __str__(self):
         if self.username:
             return self.username
-        elif self.user and self.user.username:
-            return self.user.username
+        # elif self.user and self.user.username:
+        #     return self.user.username
         else:
             return super().__str__()
 

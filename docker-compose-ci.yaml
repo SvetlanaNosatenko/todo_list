@@ -14,7 +14,7 @@ services:
   front:
 #    image: sermalenk/skypro-front:lesson_36
 #    image: sermalenk/skypro-front:lesson_37
-    image: sermalenk/skypro-front:lesson-38
+    image: sermalenk/skypro-front:lesson_38
     restart: always
     ports:
       - "80:80"
@@ -36,7 +36,7 @@ services:
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
     healthcheck:
-#      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
+      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
       interval: 3s
       timeout: 3s
       retries: 3

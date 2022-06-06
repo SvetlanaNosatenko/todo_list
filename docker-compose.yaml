@@ -5,7 +5,7 @@ services:
   front:
 #    image: sermalenk/skypro-front:lesson_36
 #    image: sermalenk/skypro-front:lesson_37
-    image: sermalenk/skypro-front:lesson_38
+    image: sermalenk/skypro-front:lesson_35
     ports:
       - "80:80"
     depends_on:
@@ -44,12 +44,6 @@ services:
     volumes:
       - ./:/app/
     command: python manage.py runserver 0.0.0.0:8000
-    healthcheck:
-      test: curl -sS http://127.0.0.1:8000/health/ || exit 1
-      interval: 3s
-      timeout: 3s
-      retries: 3
-
 
   bot:
     build:

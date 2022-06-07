@@ -22,6 +22,8 @@ services:
   api:
     image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment: *environment-shared
+    ports:
+      - 8000:8000
     restart: always
     depends_on:
       postgres:

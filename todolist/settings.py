@@ -52,7 +52,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'social_django',
+    'django_filters',
     'core',
+    'goals',
+    'bot',
 ]
 
 MIDDLEWARE = [
@@ -153,13 +156,13 @@ CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+BOT_TOKEN = env.str('BOT_TOKEN')
 
 AUTH_USER_MODEL = 'core.User'
 SOCIAL_AUTH_TRAILING_SLASH = False
 APPEND_SLASH = False
-

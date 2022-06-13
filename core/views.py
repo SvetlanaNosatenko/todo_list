@@ -1,5 +1,7 @@
 from django.contrib.auth import login, logout
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.generics import CreateAPIView, UpdateAPIView, GenericAPIView, \
     RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -17,6 +19,7 @@ class SignupView(CreateAPIView):
     serializer_class = CreateUserSerializer
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
 

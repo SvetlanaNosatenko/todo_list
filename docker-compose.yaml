@@ -3,9 +3,7 @@ version: "3.9"
 services:
 
   front:
-#    image: sermalenk/skypro-front:lesson_36
-#    image: sermalenk/skypro-front:lesson_37
-    image: sermalenk/skypro-front:lesson_35
+    image: sermalenk/skypro-front:lesson_38
     ports:
       - "80:80"
     depends_on:
@@ -41,9 +39,24 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
-    command: python manage.py runserver 0.0.0.0:8000
+
+#  bot:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    env_file:
+#      - .env
+#    environment:
+#      POSTGRES_HOST: postgres
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      migrations:
+#        condition: service_completed_successfully
+#    command: python manage.py runbot
 
   postgres:
     image: postgres:13.0-alpine

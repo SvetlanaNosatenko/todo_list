@@ -45,8 +45,7 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=username, password=password)
         if not user:
             raise ValidationError("Username or password is incorrect")
-        attrs["user"] = user
-        return attrs
+        return user
 
 
 class UpdatePasswordSerializer(serializers.ModelSerializer):
@@ -70,4 +69,3 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['new_password'])
         user.save(update_fields=["password"])
         return user
-

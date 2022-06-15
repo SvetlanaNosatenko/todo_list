@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'social_django',
-    # 'django_filters',
+    'django_filters',
     'core',
     'goals',
     'bot',

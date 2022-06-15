@@ -35,8 +35,8 @@ services:
     image: nosatenko/todo_list:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment: *environment-shared
     restart: always
-    env_file:
-      - .env
+#    env_file:
+#      - .env
     depends_on:
       postgres:
         condition: service_healthy

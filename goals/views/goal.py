@@ -1,9 +1,10 @@
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 
+from goals.filters import GoalDateFilter
 from goals.models import Goal
 from goals.permissions import GoalPermissions
 from goals.serializer import GoalSerializer, GoalCreateSerializer
@@ -21,11 +22,11 @@ class GoalListView(ListAPIView):
     serializer_class = GoalSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = [
-        # DjangoFilterBackend,
+        DjangoFilterBackend,
         OrderingFilter,
         SearchFilter,
     ]
-    # filterset_class = GoalDateFilter
+    filterset_class = GoalDateFilter
     ordering_fields = ["due_date", 'priority']
     ordering = ["title"]
     search_fields = ["title", "description"]

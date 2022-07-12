@@ -77,7 +77,7 @@ class Command(BaseCommand):
         if msg.text.isdigit():
             category_id = int(msg.text)
             if GoalCategory.objects.filter(
-                board__participants__user_id=tg_user.user.id,
+                board__participants__user__id=tg_user.user.id,
                 is_deleted=False,
                 id=category_id
             ).count():
@@ -117,7 +117,7 @@ class Command(BaseCommand):
                 self.handle_save_new_goal(msg=msg, tg_user=tg_user)
 
         elif msg.text.startswith('/'):
-            self.tg_client.send_message(msg.chat.id, '[unknown command]')
+            self.tg_client.send_message(msg.chat.id, text='[unknown command]')
 
     def handle_message(self, msg: Message):
         tg_user, created = TgUser.objects.get_or_create(

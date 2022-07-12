@@ -1,9 +1,8 @@
 from django.db import transaction
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated
-
 from goals.models import GoalCategory, Goal
 from goals.permissions import GoalCategoryPermissions
 from goals.serializer import GoalCategoryCreateSerializer, GoalCategorySerializer
@@ -11,22 +10,21 @@ from goals.serializer import GoalCategoryCreateSerializer, GoalCategorySerialize
 
 class GoalCategoryCreateView(CreateAPIView):
     model = GoalCategory
-    permission_classes = [IsAuthenticated]
+    permission_classes = [GoalCategoryPermissions]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(ListAPIView):
     model = GoalCategory
-    permission_classes = [IsAuthenticated]
+    permission_classes = [GoalCategoryPermissions]
     serializer_class = GoalCategorySerializer
     pagination_class = LimitOffsetPagination
     filter_backends = [
-    #     DjangoFilterBackend,
+        DjangoFilterBackend,
         OrderingFilter,
-        SearchFilter,
+        SearchFilter
     ]
-    # filterset_class = GoalDateFilter
-    filterset_fields = ["board", "user"]
+    filterset_fields = ["board"]
     ordering_fields = ["title", "created"]
     ordering = ["title"]
     search_fields = ["title"]
@@ -48,7 +46,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         with transaction.atomic():
             instance.is_deleted = True
+            Goal.objects.filter(category=instance).update(status=Goal.Status.archived)
             instance.save()
-            instance.goals.update(Status=Goal.Status.archived)
         return instance
 

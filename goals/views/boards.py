@@ -1,6 +1,8 @@
 from django.db import transaction
-from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 
 from goals.models import Board, Goal
@@ -10,13 +12,13 @@ from goals.serializer import BoardCreateSerializer, BoardSerializer, BoardListSe
 
 class BoardCreateView(CreateAPIView):
     model = Board
-    permission_classes = [BoardPermissions]
+    permission_classes = [IsAuthenticated]
     serializer_class = BoardCreateSerializer
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
     model = Board
-    permission_classes = [BoardPermissions]
+    permission_classes = [IsAuthenticated, BoardPermissions]
     serializer_class = BoardSerializer
 
     def get_queryset(self):
@@ -34,9 +36,9 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 
 
 class BoardListView(ListAPIView):
-    model = Board
     permission_classes = [BoardPermissions]
     serializer_class = BoardListSerializer
+    pagination_class = LimitOffsetPagination
     filter_backends = [OrderingFilter]
     ordering = ['title']
 

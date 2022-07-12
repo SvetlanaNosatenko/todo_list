@@ -15,30 +15,28 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "user", "is_deleted")
         fields = "__all__"
 
+    def validate_board(self, value):
+        if value.is_deleted:
+            raise serializers.ValidationError("not allowed in deleted category")
+
+
+        if not BoardParticipant.objects.filter(
+                board=value,
+                role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
+                user=self.context['request'].user
+        ).exists():
+            return ValidationError('You must be owner or writer')
+
+        return value
+
 
 class GoalCategorySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = GoalCategory
-        read_only_fields = ("id", "created", "updated", "user")
+        read_only_fields = ("id", "created", "updated", "user", "board")
         fields = "__all__"
-
-    def validate_board(self, value):
-        if value.is_deleted:
-            raise serializers.ValidationError("not allowed in deleted category")
-
-        if value.user != self.context["request"].user:
-            raise serializers.ValidationError("not owner of category")
-
-        if not BoardParticipant.objects.filter(
-                board=value,
-                role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
-                user=self.context['request'].user
-        ).exist():
-            return ValidationError('You must be owner or writer')
-
-        return value
 
 
 class GoalSerializer(serializers.ModelSerializer):
@@ -49,7 +47,7 @@ class GoalSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "user", "is_deleted")
         fields = "__all__"
 
-    def validate_goal(self, value):
+    def validate_category(self, value):
         if value.is_deleted:
             raise serializers.ValidationError("not allowed in deleted category")
 
@@ -67,29 +65,31 @@ class GoalCreateSerializer(GoalSerializer):
                 board=value.board_id,
                 role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
                 user=self.context['request'].user
-        ).exist():
+        ).exists():
             raise ValidationError('You must be owner or writer')
         return value
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = GoalComment
         fields = "__all__"
-        read_only_fields = ("id", "created", "updated")
+        read_only_fields = ("id", "created", "updated", "user")
 
     def validate_goal(self, value):
         if not BoardParticipant.objects.filter(
                 board=value.category.board_id,
                 role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
                 user=self.context['request'].user
-        ).exist():
+        ).exists():
             raise ValidationError('You must be owner or writer')
         return value
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True, source="owner")
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = GoalComment
@@ -99,7 +99,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class BoardCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    # user = UserSerializer(read_only=True, source="owner")
 
     class Meta:
         model = Board
@@ -117,7 +116,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 class BoardParticipantSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(
-        required=True, choices=BoardParticipant.Role.choices[1:]
+        required=True, choices=BoardParticipant.Role.choices.pop(0)
     )
 
     user = serializers.SlugRelatedField(
@@ -140,7 +139,6 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated")
 
     def update(self, instance, validated_data):
-        # owner = validated_data.pop("user")
         owner = self.context['request'].user
         new_participants = validated_data.pop("participants", [])
         new_by_id = {part["user"].id: part for part in new_participants}
@@ -172,9 +170,12 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class BoardListSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Board
         fields = "__all__"
+        read_only_fields = ("id", "created", "updated")
 
 
 

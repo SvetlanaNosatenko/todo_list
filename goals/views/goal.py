@@ -2,8 +2,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated
-
 from goals.filters import GoalDateFilter
 from goals.models import Goal
 from goals.permissions import GoalPermissions
@@ -44,6 +42,6 @@ class GoalView(RetrieveUpdateDestroyAPIView):
         return Goal.objects.filter(category__board__participants__user=self.request.user)
 
     def perform_destroy(self, instance):
-        instance.is_deleted = True
+        instance.status = Goal.Status.archived
         instance.save()
         return instance

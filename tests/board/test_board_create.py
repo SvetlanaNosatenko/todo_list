@@ -2,22 +2,24 @@ import pytest
 
 
 @pytest.mark.django_db
-def test_create_comment(client, logged_user, goal, board_participants):
+def test_create_board(client, logged_user):
 
     expected_response = {
         'created': '2022-07-02T17:36:02.951064Z',
-        'goal': goal.pk,
-        'id': 6,
-        'text': 'text_test',
+        'id': 1,
+        'is_deleted': False,
+        'title': 'create_board',
         'updated': '2022-07-02T17:36:02.951064Z'
     }
 
     data = {
-        'goal': goal.pk,
-        'text': 'text_test'
+        'created': '2022-07-02T17:36:02.951064Z',
+        'is_deleted': False,
+        'title': 'create_board',
+        'updated': '2022-07-02T17:36:02.951064Z'
     }
 
-    response = client.post("/goals/goal_comment/create",
+    response = client.post("/goals/board/create",
                            data,
                            content_type="application/json"
                            )

@@ -35,7 +35,7 @@ def create_objects(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('goals', '0004_board_goalcategory_board_boardparticipant'),
+        ('goals', '0004_board'),
     ]
 
     operations = [

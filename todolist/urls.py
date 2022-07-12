@@ -22,8 +22,8 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('core/', include(('core.urls', 'core'), namespace='core')),
     path("goals/", include(("goals.urls", 'goals'), namespace='goals')),
-    # path("bot/", include(("bot.urls", 'bot'), namespace='bot')),
-    # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path("bot/", include(("bot.urls", 'bot'), namespace='bot')),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    # re_path(r'^redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

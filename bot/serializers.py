@@ -10,7 +10,7 @@ class TgUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TgUser
-        fields = ("tg_id", "username", "user_id")
+        fields = ("tg_id", "username", "verification_code", "user_id")
         read_only_fields = ("tg_id", "username", "user_id")
 
     def validate(self, attrs):
@@ -20,4 +20,4 @@ class TgUserSerializer(serializers.ModelSerializer):
             raise ValidationError({"verification_code": "field is incorrect"})
 
         attrs["tg_user"] = tg_user
-        return tg_user
+        return attrs

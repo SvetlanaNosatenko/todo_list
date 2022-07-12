@@ -5,6 +5,9 @@ from goals.models import BoardParticipant
 
 class BoardPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        if not request.user:
+            return False
+
         if not request.user.is_authenticated:
             return False
 
@@ -20,6 +23,8 @@ class BoardPermissions(permissions.BasePermission):
 class GoalCategoryPermissions(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
+        if not request.user:
+            return False
         if not request.user.is_authenticated:
             return False
 
@@ -33,6 +38,9 @@ class GoalCategoryPermissions(permissions.BasePermission):
 class GoalPermissions(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
+        if not request.user:
+            return False
+
         if not request.user.is_authenticated:
             return False
 
@@ -46,10 +54,14 @@ class GoalPermissions(permissions.BasePermission):
 class CommentsPermissions(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
+        if not request.user:
+            return False
+
         if not request.user.is_authenticated:
             return False
 
+        filters: dict = {'user': request.user, 'board': obj.goal.category.board}
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.user == request.user
+        return BoardParticipant.objects.filter(**filters).exists()

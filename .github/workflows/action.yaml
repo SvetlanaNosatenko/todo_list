@@ -30,13 +30,14 @@ jobs:
         run: |
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
+          cat prod_docker_ci.py | envsubst > deploy/docker_config.py
       - name: clone files to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "deploy/docker-compose.yaml"
+          source: "deploy/docker-compose.yaml, deploy/docker_config.py"
           target: "todo_list"
           strip_components: 1
 # Just for test (is not secure)
